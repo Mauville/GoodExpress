@@ -108,7 +108,6 @@ exports.create = (product) => {
       description: product.description
     });
 }
-
 ```
 
 Después de crear la función de almacenamiento en el modelo, modificaremos la lógica de nuestro controlador para que haga el `parsing` correcto del input del usuario y almacene el producto.
@@ -134,7 +133,6 @@ exports.store = (req, res) => {
       res.redirect('/');
     });
 }
-
 ```
 
 ## Mostrar
@@ -210,7 +208,7 @@ En la vista `views/products/show.hbs`  utilizamos la información del producto:
 </table>
 ```
 
-Finalment modificamos nuestro archivo de rutas para que incluya la ruta para mostrar el producto.
+Finalmente modificamos nuestro archivo de rutas para que incluya la ruta para mostrar el producto.
 
 ```js
 // routes/app.js
@@ -220,8 +218,180 @@ Finalment modificamos nuestro archivo de rutas para que incluya la ruta para mos
 // Implementa ver el detalle de un producto
 router.get('/products/:id', ProductsController.show);
 
+// router.post('/products', ProductsController.store);
+```
+
+## Actualizar
+
+La actualización se divide en dos procesos:
+
+1. Formulario de actualización
+
+2. Actualizar los campos
+
+### Formulario de actualización
+
+En el formulario de actualización nos enfocamos en darle al usuario una ventana para que pueda actualizar los datos del producto, esto significa que tenemos que generar nuevas rutas y funciones en el controlador.
+
+En el controlador se agregó la función `edit` para manejar la vista del formulario
+
+```js
+// controllers/ProductsController.js
+
+// ...
+
+exports.edit = (req, res) => {
+  // Obtiene el id que viene en la url
+  let id = req.params.id;
+  // Busca dentro de la base de datos el producto con el id indicado
+  ProductModel.find(id).then((product) => {
+    // Si el producto no existe entonces
+    if (product == null) {
+      // Regresa el error 404
+      res.status(404).send('Not found');
+      return;
+    }
+    // Si el producto existe entonces muestra la vista products/edit.hbs
+    // con la información del producto
+    res.render('products/edit', {product: product});
+  });
+}
+
+// ...
+```
+
+En el controlador se agregó la ruta para ver el formulario
+
+```js
+// routes/app.js
+
+// router.get('/products/:id', ProductsController.show);
+
+// Implementa editar un producto
+router.get('/products/:id/edit', ProductsController.edit);
 
 // router.post('/products', ProductsController.store);
 ```
 
+Se creó la vista que muestra el formulario con los datos del producto
 
+```handlebars
+<!-- views/products/edit.hbs -->
+<h1>Edit product</h1>
+<form method="" action="">
+    <div>
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name" value="{{ product.name }}">
+    </div>
+    <div>
+        <label for="price">Price: </label>
+        <input type="text" id="price" name="price" value="{{ product.price }}">
+    </div>
+    <div>
+        <label for="description">Description: </label>
+        <input type="text" id="description" name="description" value="{{ product.description }}">
+    </div>
+    <div>
+        <input type="submit" value="Edit">
+    </div>
+</form>
+```
+
+### Actualizar los campos
+
+Es común asociar la actualización con el método `PUT` o `PATCH` de la petición, sin embargo estas peticiones no se pueden hacer desde el navegador ya que la etiqueta `<form method="">` solo reconoce `GET` y `POST` por lo cual se tiene que hacer una sobreescritura de este método.
+
+Para realizar la sobreescritura podemos usar el paquete [method-override](https://www.npmjs.com/package/method-override). En consola ejecuta:
+
+```bash
+npm i method-override
+```
+
+Después modifica tu archivo `index.js` para que se haga la sobreescitura:
+
+```js
+// index.js
+
+// let app = express();
+
+// Sobreescribe el método de envío
+let methodOverride = require('method-override')
+// sobreescribe el método POST
+app.use(methodOverride('_method'))
+```
+
+Con esto ya hemos hecho la sobreescritura del método  de envío, es decir, nuestro `<form>` enviará una petición `POST` pero Express.js la tratará como una petición `PUT`. Para hacer el envío del método `PUT` modificamos nuestro formulario para que se muestren los atributos correctos del `<form>`.
+
+```handlebars
+<!-- views/products/edit.hbs -->
+<form method="POST" action="/products/{{ product.id }}?_method=PUT">
+```
+
+Mientras que en nuestro archivo de rutas `app.js` definiremos la ruta de la siguiente forma:
+
+```js
+// routes/app.js
+
+// ...
+
+// Maneja la actualización del producto
+router.put('/products/:id', ProductsController.update);
+
+// ...
+```
+
+Puedes notar que la ruta está envíando a la función `update` del controlador `ProductsController` esta función se va a encargar de realizar la actualización:
+
+```js
+// controllers/ProductsController.js
+
+// ...
+
+exports.update = (req, res) => {
+  // Obtiene el id que viene en la url
+  let id = req.params.id;
+  // Busca dentro de la base de datos el producto con el id indicado
+  ProductModel.find(id).then((product) => {
+    // Si el producto no existe entonces
+    if (product == null) {
+      // Regresa el error 404
+      res.status(404).send('Not found');
+      return;
+    }
+
+    // Define los datos del producto actualizado
+    let updateProduct = {
+      name: req.body.name,
+      price: req.body.price,
+      description: req.body.description
+    }
+
+    // Actualiza los datos del producto
+    ProductModel.update(product.id, updateProduct)
+      .then((id) => {
+        // Al terminar redirige el índice
+        res.redirect('/');
+      });
+  });
+}
+
+// ...
+```
+
+En esta función sobresale la función `ProductModel.update` pues esta es la función que se encarga de actualizar la información del producto.
+
+```js
+// models/Product.js
+
+// ...
+
+// Actualiza el producto con el id dado con la información definida en product
+exports.update = (id, product) => {
+  return knex('products')
+    .update(product)
+    .update('updated_at', knex.fn.now())
+    .where('id', id);
+}
+```
+
+## Actualizar
