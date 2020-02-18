@@ -137,4 +137,91 @@ exports.store = (req, res) => {
 
 ```
 
+## Mostrar
+
+Al igual que para insertar un producto, para mostrar el producto debemos de:
+
+1. Crear una función dentro del controlador para que muestre el producto.
+
+2. Crear la ruta a la función de nuestro controlador.
+
+3. En la función del controlador crear la vista que vamos a regresar con la información del producto.
+
+### Mostrar un producto
+
+Para mostrar un producto, primero debemos de modificar nuestro modelo de `models/Product.js` para que pueda obtener la información del producto de nuestra base de datos.
+
+Esto lo puedes lograr con la función `select` de Knex.
+
+```js
+// models/Product.js
+
+// ...
+
+// Obtiene la información de un producto por su id
+exports.find = (id) => {
+  return knex
+    .select('*')
+    .from('products')
+    .where('id', id)
+    .first();
+}
+```
+
+Ahora que tenemos la función `find` dentro de nuestro modelo, debemos de modificar nuestro controlador para que muestre el producto indicado.
+
+```js
+// controllers/ProductsController.js
+
+// ...
+
+// Muestra el producto
+exports.show = (req, res) => {
+  // Obtiene el id que viene en la url
+  let id = req.params.id;
+  // Busca dentro de la base de datos el producto con el id indicado
+  ProductModel.find(id).then((product) => {
+    // Si el producto no existe entonces
+    if (product == null) {
+      // Regresa el error 404
+      res.status(404).send('Not found');
+      return;
+    }
+    // Si el producto existe entonces muestra la vista products/show.hbs
+    // con la información del producto
+    res.render('products/show', {product: product});
+  });
+}
+```
+
+En la vista `views/products/show.hbs`  utilizamos la información del producto:
+
+```handlebars
+<h1>Product</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <td>{{product.name}}</td>
+    </tr>
+    <tr>
+        <th>Price</th>
+        <td>{{product.price}}</td>
+    </tr>
+</table>
+```
+
+Finalment modificamos nuestro archivo de rutas para que incluya la ruta para mostrar el producto.
+
+```js
+// routes/app.js
+
+// router.get('/products/create', ProductsController.create);
+
+// Implementa ver el detalle de un producto
+router.get('/products/:id', ProductsController.show);
+
+
+// router.post('/products', ProductsController.store);
+```
+
 
