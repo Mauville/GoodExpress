@@ -525,7 +525,6 @@ module.exports = {
     }
   }
 };
-
 ```
 
 Ahora crearemos el archivo que contiene el objeto que usaremos para nuestras conexiones. Crea la carpeta `database` y crea el archivo `connection.js`:
@@ -678,5 +677,3 @@ exports.about = (req, res) => {
   res.send('About us');
 }
 ```
-
-
