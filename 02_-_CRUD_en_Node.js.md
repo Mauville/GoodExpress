@@ -394,4 +394,96 @@ exports.update = (id, product) => {
 }
 ```
 
-## Actualizar
+## Borrar
+
+La última función por implementar sería la de eliminar un producto. Las actividades que vamos a realizar son:
+
+1. Agregar la ruta de eliminar.
+
+2. Mostrar el botón para eliminar en la vista (en el detalle del producto).
+
+3. Manejar la eliminación en el controlador y en el modelo.
+
+Para agregar la ruta de eliminar, modificamos nuestro archivo `routes/app.js`:
+
+```js
+// router/app.js
+// ...
+// router.put('/products/:id', ProductsController.update);
+
+// Elimina el producto
+router.delete('/products/:id', ProductsController.delete);
+// ...
+```
+
+Después agregamos el botón de eliminar a la vista:
+
+```handlebars
+<!-- views/products/show.hbs -->
+<h1>Product</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <td>{{product.name}}</td>
+    </tr>
+    <tr>
+        <th>Price</th>
+        <td>{{product.price}}</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>
+            <form method="POST" action="/products/{{ id }}?_method=DELETE">
+                <input type="submit" value="DELETE ?">
+            </form>
+        </td>
+    </tr>
+</table>
+```
+
+Agregamos la función delete a nuestro modelo y después hacemos uso de esta función en nuestro controlador.
+
+```js
+// models/Products.js
+
+// ...
+
+// Elimina el producto con el id dado
+exports.delete = (id) => {
+  return knex('products')
+    .delete()
+    .where('id', id);
+}
+
+// ...
+```
+
+Mientras que en el controlador:
+
+```js
+// controllers/ProductsController.js
+
+// Maneja la eliminación del producto
+exports.delete = (req, res) => {
+  // Obtiene el id que viene en la url
+  let id = req.params.id;
+  // Busca dentro de la base de datos el producto con el id indicado
+  ProductModel.find(id).then((product) => {
+    // Si el producto no existe entonces
+    if (product == null) {
+      // Regresa el error 404
+      res.status(404).send('Not found');
+      return;
+    }
+    // Elimina los datos del producto
+    ProductModel.delete(product.id)
+      .then((id) => {
+        // Al terminar redirige el índice
+        res.redirect('/');
+      });
+  });
+}
+
+```
+
+
