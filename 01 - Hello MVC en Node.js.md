@@ -36,7 +36,7 @@ El argumento `-y` en el comando `npm init` llena los campos anteriores de forma 
 Para agregar el paquete de Express.js ejecuta el siguiente comando en tu terminal:
 
 ```bash
-npm express
+npm i express
 ```
 
 Si ahora exploras tu archivo `package.json` vas a notar que tiene el paquete de `express` como parte de las dependencias de tu proyecto.
