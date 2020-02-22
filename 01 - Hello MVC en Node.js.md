@@ -646,8 +646,8 @@ exports.factory = (name, description, price) => {
 exports.all = () => {
   // Realiza la consulta dentro de knex
   return knex
-    .from('products')
-    .select('*');
+    .select('*')
+    .from('products');
 }
 ```
 
