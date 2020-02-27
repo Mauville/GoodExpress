@@ -31,7 +31,7 @@ El argumento `-y` en el comando `npm init` llena los campos anteriores de forma 
 
 ## Agrega el paquete de Express.js a tu proyecto
 
-[Express.js]([https://expressjs.com/es/](https://expressjs.com/es/) es un paquete de _npm_ que nos provee de infraestructura para crear aplicaciones web con _Node.js_.
+[Express.js](https://expressjs.com/es/) es un paquete de _npm_ que nos provee de infraestructura para crear aplicaciones web con _Node.js_.
 
 Para agregar el paquete de Express.js ejecuta el siguiente comando en tu terminal:
 
@@ -110,7 +110,7 @@ Si entras en tu navegador a la dirección `http://localhost:3000` podrás ver tu
 
 ## Manejo de rutas y controladores
 
-El siguiente paso será agregar el [manejo de rutas de Express.js]([https://expressjs.com/es/guide/routing.html](https://expressjs.com/es/guide/routing.html) con el fin de direccionar al usuario a los recursos que requiere de nuestra aplicación.
+El siguiente paso será agregar el [manejo de rutas de Express.js](https://expressjs.com/es/guide/routing.html) con el fin de direccionar al usuario a los recursos que requiere de nuestra aplicación.
 
 El flujo que tendremos en nuestra aplicación será:
 
@@ -212,7 +212,7 @@ module.exports = router;
 
 Hasta ahora nuestras peticiones han contestado texto simple, sin embargo la creación de las páginas web requiere no solo de texto, sino de imágenes, links, videos, etcétera. Para tener este tipo de respuestas lo más recomendable es utilizar un `motor de vistas` (en inglés, _view engine_). 
 
-En Express.js puedes utilizar muchos motores de vistas, puedes [ver un listado de los motores aquí]([https://expressjs.com/es/guide/using-template-engines.html](https://expressjs.com/es/guide/using-template-engines.html)). Para este ejemplo utilizaremos [Handlebars]([https://www.npmjs.com/package/express-handlebars](https://www.npmjs.com/package/express-handlebars).
+En Express.js puedes utilizar muchos motores de vistas, puedes [ver un listado de los motores aquí](https://expressjs.com/es/guide/using-template-engines.html). Para este ejemplo utilizaremos [Handlebars](https://www.npmjs.com/package/express-handlebars).
 
 El primer paso que tenemos que hacer es indicarle a `node.js` que vamos a utilizar el paquete `express-handlebars`. Ejecuta en tu línea de comandos:
 
@@ -323,9 +323,9 @@ Este primer acercamiento utilizará una base de datos relacional a través de My
 
 ### Integración de Knex.js
 
-Para realizar la conexión con MySQL utilizaremos el paquete de [Knex.js]([http://knexjs.org/](http://knexjs.org/). Knex.js es un Query Builder que nos facilita la construcción de nuestros _queries_ y el manejo de la base de datos. A parte de poder utilizar este _query builder_, Node también cuenta con ORM (_Object Relational Mapping_), los cuales a parte de ser un _query builder_ nos ayudan a transformar las respuestas de nuestros _queries_ en objetos que podemos usar en nuestro sistema. 
+Para realizar la conexión con MySQL utilizaremos el paquete de [Knex.js](http://knexjs.org/). Knex.js es un Query Builder que nos facilita la construcción de nuestros _queries_ y el manejo de la base de datos. A parte de poder utilizar este _query builder_, Node también cuenta con ORM (_Object Relational Mapping_), los cuales a parte de ser un _query builder_ nos ayudan a transformar las respuestas de nuestros _queries_ en objetos que podemos usar en nuestro sistema. 
 
-Para utilizar Knex.js primero utilizaremos un paquete conocido como [dotenv]([https://www.npmjs.com/package/dotenv](https://www.npmjs.com/package/dotenv). Con este paquete podemos manejar las variables de entorno que utilizará nuestro sistema.
+Para utilizar Knex.js primero utilizaremos un paquete conocido como [dotenv](https://www.npmjs.com/package/dotenv). Con este paquete podemos manejar las variables de entorno que utilizará nuestro sistema.
 
 #### Integración de dotenv
 
@@ -397,7 +397,7 @@ app.listen(appConfig.express_port,() => {
 
 Ahora que ya tenemos `dotenv` en nuestra aplicación utilizaremos los paquetes necesarios para la base de datos.
 
-Primero debemos de instalar [Knex.js](%5Bhttp://knexjs.org/%5D(http://knexjs.org/) de forma global. Cuando instalas un paquete de forma global este estará disponible en cualquier ubicación de tu computadora y solo tiene que ser instalado una vez.
+Primero debemos de instalar [Knex.js](http://knexjs.org/) de forma global. Cuando instalas un paquete de forma global este estará disponible en cualquier ubicación de tu computadora y solo tiene que ser instalado una vez.
 
 Para instalar knex de forma global usa:
 
@@ -416,7 +416,7 @@ knex --version
 # Knex Local version: 0.20.9
 ```
 
-Ahora define dentro de las dependencias los paquetes de [Knex.js]([http://knexjs.org/](http://knexjs.org/) y [MySQL2]([https://www.npmjs.com/package/mysql2](https://www.npmjs.com/package/mysql2).
+Ahora define dentro de las dependencias los paquetes de [Knex.js](http://knexjs.org/) y [MySQL2](https://www.npmjs.com/package/mysql2).
 
 ```bash
 npm i mysql2 knex
