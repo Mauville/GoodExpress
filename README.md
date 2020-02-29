@@ -1,6 +1,6 @@
 # Lecciones de laboratorio de desarrollo de aplicaciones web
 
-En este repositorio puedes encontrar las lecciones del curso Laboratorio de desarrollo de aplicacions web.
+En este repositorio puedes encontrar las lecciones del curso Laboratorio de desarrollo de aplicaciones web.
 
 1. [Introducción a Node.js](01_-_Hello_MVC_en_Node.js.md)
 
